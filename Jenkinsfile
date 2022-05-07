@@ -11,7 +11,7 @@ pipeline {
                  git 'https://github.com/jodada1/dockerproject.git' 
              }
          } 
-         stage('Building Docker image') { 
+         stage('Building latest Docker image') { 
              steps { 
                  script { 
                      dockerImage = docker.build registry + ":$BUILD_NUMBER" 
