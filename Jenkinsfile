@@ -28,3 +28,13 @@ pipeline {
                  }
              }
          }    
+        stage('Run container on ECS') { 
+             steps { 
+                 withAWS(region:'us-east-2', credentials:'aws-cred' ) {
+                sh 'aws ecs update-service --cluster my-cluster --service newecs-service --task-definition newecs-tg --force-new-deployment'
+             }
+             }
+         }
+
+     }
+ } 
