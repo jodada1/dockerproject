@@ -11,7 +11,7 @@ pipeline {
                  git 'https://github.com/jodada1/dockerproject.git' 
              }
          } 
-         stage('Building latest Docker image') { 
+         stage('Building Docker image') { 
              steps { 
                  script { 
                      dockerImage = docker.build registry + ":$BUILD_NUMBER" 
@@ -27,11 +27,19 @@ pipeline {
                      }
                  }
              }
-         }    
-        stage('Run container on ECS') { 
+         } 
+         stage('Cleaning up') { 
+             steps { 
+                 sh "docker rmi $registry:$BUILD_NUMBER" 
+             }
+         }
+         stage('Run container on ECS') { 
              steps { 
                  withAWS(region:'us-east-1', credentials:'aws-cred' ) {
                 sh 'aws ecs update-service --cluster jenkins-cluster --service jenkins-service --task-definition jenkins-task --force-new-deployment'
              }
+             }
          }
+
      }
+ } 
