@@ -11,14 +11,14 @@ pipeline {
                  git 'https://github.com/jodada1/dockerproject.git' 
              }
          } 
-         stage('Building Docker image') { 
+         stage('Building image Docker') { 
              steps { 
                  script { 
                      dockerImage = docker.build registry + ":$BUILD_NUMBER" 
                  }
              } 
          }
-         stage('Deploy image to Dockerhub') { 
+         stage('Deploy our image to Dockerhub') { 
              steps { 
                  script { 
                      docker.withRegistry( '', registryCredential ) { 
@@ -27,7 +27,12 @@ pipeline {
                      }
                  }
              }
-         }          
+         } 
+         stage('Cleaning up') { 
+             steps { 
+                 sh "docker rmi $registry:$BUILD_NUMBER" 
+             }
+         }
          stage('Run container on ECS') { 
              steps { 
                  withAWS(region:'us-east-1', credentials:'aws-cred' ) {
@@ -35,5 +40,6 @@ pipeline {
              }
              }
          }
+
      }
  } 
