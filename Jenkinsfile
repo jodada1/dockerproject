@@ -30,7 +30,7 @@ pipeline {
          } 
          stage('Run container on ECS') { 
              steps { 
-                 withAWS(region:'us-east-1', credentials:'aws-cred' ) {
+                 withAWS(region:'us-east-2', credentials:'aws-cred' ) {
                 sh 'aws ecs update-service --cluster jenkins-cluster --service jenkins-service --task-definition jenkins-task --force-new-deployment'
              }
              }
