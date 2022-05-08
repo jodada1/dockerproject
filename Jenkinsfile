@@ -28,11 +28,6 @@ pipeline {
                  }
              }
          } 
-         stage('Cleaning up') { 
-             steps { 
-                 sh "docker rmi $registry:$BUILD_NUMBER" 
-             }
-         }
          stage('Run container on ECS') { 
              steps { 
                  withAWS(region:'us-east-1', credentials:'aws-cred' ) {
@@ -40,6 +35,5 @@ pipeline {
              }
              }
          }
-
      }
  } 
